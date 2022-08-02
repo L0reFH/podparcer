@@ -50,7 +50,7 @@ def vk_auth():
         token = data[2].replace("\n", "")
 
 
-    group_vk_session = vk_api.VkApi(token="vk1.a.CrhvHZXvMl3FisRv_W2XflSSPdfF8QgEzbJyAPSV2Fo8vUTys8_5u1GmU86LgbjE97OQutXsNLtR6gIV0uVGVtE0PmFxXqq95oxyqvMIJM-A-BazaVTHg3nh5Gznkm1fo6gjM8qF8CB7uk0N3V-e8OPNu1EHgRkNSSEvtqu2p9WIouJuO488r5c7VDiXuRrS")
+    group_vk_session = vk_api.VkApi(token=token)
 
     api = vk.UserAPI(user_password=password, user_login=login, v="5.131", client_id=8233295)
 
