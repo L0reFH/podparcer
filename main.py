@@ -104,11 +104,11 @@ def get_daily_posts():
     daily_posts = []
     
     for post in get_all_posts():
-        post_time = datetime.fromtimestamp(post["date"]).day
-        today_time = datetime.now().day
+        post_time = datetime.fromtimestamp(post["date"])
+        today_time = datetime.now()
         
 
-        if today_time - post_time == 0:
+        if today_time.day - post_time.day == 0 and today_time.month-post_time.month == 0:
             daily_posts.append(post)
     
     return daily_posts
@@ -118,10 +118,10 @@ def get_past_day_posts():
     past_day_posts = []
     
     for post in get_all_posts():
-        post_time = datetime.fromtimestamp(post["date"]).day
-        today_time = datetime.now().day
+        post_time = datetime.fromtimestamp(post["date"])
+        today_time = datetime.now()
 
-        if  today_time - post_time == 1:
+        if  today_time.day - post_time.day == 1 and today_time.month - post_time.month == 0:
             past_day_posts.append(post)
 
     return past_day_posts
