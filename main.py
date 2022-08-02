@@ -92,7 +92,7 @@ def get_hour_posts():
         today_time = datetime.now()
         days_from = today_time - post_time
 
-        if days_from.days == 0 and today_time.hour-post_time.hour <= 1:
+        if days_from.days == 0 and today_time.hour-post_time.hour == 0:
             hour_posts.append(post)
         else:
             continue
