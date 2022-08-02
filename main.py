@@ -104,8 +104,8 @@ def get_daily_posts():
     daily_posts = []
     
     for post in get_all_posts():
-        post_time = datetime.fromtimestamp(post["date"]).hour
-        today_time = datetime.now().hour
+        post_time = datetime.fromtimestamp(post["date"]).day
+        today_time = datetime.now().day
         
 
         if today_time - post_time == 0:
@@ -118,8 +118,8 @@ def get_past_day_posts():
     past_day_posts = []
     
     for post in get_all_posts():
-        post_time = datetime.fromtimestamp(post["date"]).hour
-        today_time = datetime.now().hour
+        post_time = datetime.fromtimestamp(post["date"]).day
+        today_time = datetime.now().day
 
         if  today_time - post_time == 1:
             past_day_posts.append(post)
