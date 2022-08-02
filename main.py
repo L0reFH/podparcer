@@ -92,7 +92,7 @@ def get_hour_posts():
         today_time = datetime.now()
         days_from = today_time - post_time
 
-        if days_from.days == 0 and today_time.hour-post_time.hour == 0:
+        if days_from.days == 0 and today_time.hour-post_time.hour >= 0 and today_time.hour-post_time.hour <= 2:
             hour_posts.append(post)
         else:
             continue
@@ -104,11 +104,11 @@ def get_daily_posts():
     daily_posts = []
     
     for post in get_all_posts():
-        post_time = datetime.fromtimestamp(post["date"])
-        today_time = datetime.now()
-        days_from = today_time - post_time
+        post_time = datetime.fromtimestamp(post["date"]).strftime("%H")
+        today_time = datetime.now().strftime("%H")
+        
 
-        if days_from.days < 1:
+        if today_time - post_time == 0:
             daily_posts.append(post)
     
     return daily_posts
@@ -118,11 +118,10 @@ def get_past_day_posts():
     past_day_posts = []
     
     for post in get_all_posts():
-        post_time = datetime.fromtimestamp(post["date"])
-        today_time = datetime.now()
-        days_from = today_time - post_time
+        post_time = datetime.fromtimestamp(post["date"]).strftime("%H")
+        today_time = datetime.now().strftime("%H")
 
-        if days_from.days == 1:
+        if  today_time - post_time == 1:
             past_day_posts.append(post)
 
     return past_day_posts
@@ -167,7 +166,8 @@ for event in group_lp.listen():
                 attachments = post["attachments"]
                 post_link = post["link"]
                 group_api.messages.send(keyboard=keyboard.get_keyboard(), user_id=event.user_id, random_id=get_random_id(), message=f"{post_date}\nТекст поста: {post_text}\nСоздатель поста: {post_signer}\nСсылка на пост: {post_link}", attachment=attachments)
-                group_api.messages.send(keyboard=keyboard.get_keyboard(), user_id=event.user_id, random_id=get_random_id(), message="Готово!")
+                
+            group_api.messages.send(keyboard=keyboard.get_keyboard(), user_id=event.user_id, random_id=get_random_id(), message="Готово!")
 
         elif event.text.lower() == 'вчера' or event.text.lower() == "3":
             
