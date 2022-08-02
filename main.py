@@ -63,7 +63,7 @@ def get_all_posts():
 
     for group in groups:
         try:
-            group_posts = api.wall.get(owner_id=group, count=100)
+            group_posts = api.wall.get(owner_id=group, count=70)
         except:
             continue
         for post in group_posts["items"]:
@@ -87,43 +87,64 @@ def get_hour_posts():
     global hour_posts
     hour_posts = []
     
+    signers = []
+    
     for post in get_all_posts():
         post_time = datetime.fromtimestamp(post["date"])
         today_time = datetime.now()
         days_from = today_time - post_time
-
-        if days_from.days == 0 and today_time.hour-post_time.hour >= 0 and today_time.hour-post_time.hour <= 2:
-            hour_posts.append(post)
-        else:
+        post_signer = post["signer"]
+        
+        if post_signer in signers:
             continue
+        else:
+            if days_from.days == 0 and today_time.hour-post_time.hour >= 0 and today_time.hour-post_time.hour <= 2:
+                hour_posts.append(post)
+                signers.append(post_signer)
+            else:
+                continue
 
     return hour_posts
 
 def get_daily_posts():
     global daily_posts
     daily_posts = []
+    signers = []
     
     for post in get_all_posts():
         post_time = datetime.fromtimestamp(post["date"])
         today_time = datetime.now()
+        post_signer = post["signer"]
         
-
-        if today_time.day - post_time.day == 0 and today_time.month-post_time.month == 0:
-            daily_posts.append(post)
-    
+        if post_signer in signers: 
+            continue
+            
+        else:
+            if today_time.day - post_time.day == 0 and today_time.month-post_time.month == 0:
+                daily_posts.append(post)
+                signers.append(post_signer)
+            else: 
+                continue
+                
     return daily_posts
 
 def get_past_day_posts():
     global past_day_posts
     past_day_posts = []
-    
+    signers = []
+  
     for post in get_all_posts():
         post_time = datetime.fromtimestamp(post["date"])
         today_time = datetime.now()
-
-        if  today_time.day - post_time.day == 1 and today_time.month - post_time.month == 0:
-            past_day_posts.append(post)
-
+        post_signer = post["signer"]
+        
+        if post_signer in signers:
+            continue
+        else:
+            if today_time.day - post_time.day == 1 and today_time.month - post_time.month == 0:
+                past_day_posts.append(post)                             
+                signers.append(post_signers)
+        
     return past_day_posts
 
 group_api = group_vk_session.get_api()
