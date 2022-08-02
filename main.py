@@ -143,7 +143,7 @@ def get_past_day_posts():
         else:
             if today_time.day - post_time.day == 1 and today_time.month - post_time.month == 0:
                 past_day_posts.append(post)                             
-                signers.append(post_signers)
+                signers.append(post_signer)
         
     return past_day_posts
 
