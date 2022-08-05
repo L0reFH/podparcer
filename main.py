@@ -66,21 +66,50 @@ def get_all_posts():
             group_posts = api.wall.get(owner_id=group, count=70)
         except:
             continue
-        for post in group_posts["items"]:
-            try:
+        for post in group_posts["items"]: 
+            if "signer_id" in post and "attachments" in post:
                 post_text = post["text"]
                 post_signer = post["signer_id"]
                 post_date = post["date"]
                 attachments = []
                 post_id_d = post["id"]
                 for attachment in post["attachments"]:
-                    owner_id = attachment["photo"]["owner_id"]
-                    post_id = attachment["photo"]["id"]
-                    attachments.append(f"photo{owner_id}_{post_id}")
-                posts_dict = {"group": f"vk.com/club{group*-1}", "date": post_date, "text": post_text, "signer": f"vk.com/id{post_signer}", "attachments": attachments, "link": f"vk.com/id{group*-1}?w=wall{group}_{post_id_d}"}
+                    if attachment["type"] == "photo":
+                        owner_id = attachment["photo"]["owner_id"]
+                        post_id = attachment["photo"]["id"]
+                        attachments.append(f"photo{owner_id}_{post_id}")
+                    elif attachment["type"] == "video":
+                        owner_id = attachment["video"]["owner_id"]
+                        post_id = attachment["video"]["id"]
+                        attachments.append(f"video{owner_id}_{post_id}")
+                posts_dict = {"group": f"vk.com/club{group*-1}", "date": post_date, "text": post_text, "signer": f"vk.com/id{post_signer}", "attachments": attachments, "link": f"vk.com/club{group*-1}?w=wall{group}_{post_id_d}"}
                 posts.append(posts_dict)
-            except:
+
+            elif "copy_history" in post or "is_pinned" in post:
                 continue
+
+            else:
+                post_text = post["text"]
+                post_signer = post["from_id"]
+                post_date = post["date"]
+                attachments = []
+                post_id_d = post["id"]
+                
+                if "attachments" in post: 
+                    for attachment in post["attachments"]:
+                        if attachment["type"] == "photo":
+                            owner_id = attachment["photo"]["owner_id"]
+                            post_id = attachment["photo"]["id"]
+                            attachments.append(f"photo{owner_id}_{post_id}")                            
+                        elif attachment["type"] == "video":
+                            owner_id = attachment["video"]["owner_id"]
+                            post_id = attachment["video"]["id"]
+                            attachments.append(f"video{owner_id}_{post_id}")
+
+                                              
+                    posts_dict = {"group": f"vk.com/club{group*-1}", "date": post_date, "text": post_text, "signer": f"vk.com/id{post_signer}", "attachments": attachments, "link": f"vk.com/club{group*-1}?w=wall{group}_{post_id_d}"}
+                    posts.append(posts_dict)
+                    
     return posts
 
 def get_hour_posts():
